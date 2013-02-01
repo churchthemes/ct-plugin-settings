@@ -1,0 +1,22 @@
+/**
+ * CT Options Styles
+ */
+
+/**********************************************
+ * OPTIONS
+ **********************************************/
+
+/* Hide tabs and form before load */
+ 
+#ctoptions-tabs,
+#ctoptions-form,
+#ctoptions-form tr {
+	display: none;
+}
+
+/* Input */
+
+.ctoptions-textarea {
+	width: 400px;
+	height: 100px;
+}
