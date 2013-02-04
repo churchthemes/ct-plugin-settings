@@ -13,7 +13,7 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 		function __construct( $config ) {
 
 			// Version - used in cache busting
-			$this->version = '0.6.0'; // February 1, 2013
+			$this->version = '0.6'; // February 1, 2013
 
 			// Config
 			$this->config = $config;
