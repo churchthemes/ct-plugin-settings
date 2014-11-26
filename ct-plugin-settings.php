@@ -1,15 +1,19 @@
 <?php
 /**
- * CT Options
+ * CT Plugin Settings
  *
- * This class generates a settings page for plugins.
+ * This class generates a tabbed settings page for WordPress plugins.
  *
- * The CTO_URL constant must be defined in order for JS/CSS to enqueue.
- * See Church Theme Content plugin for example usage.
+ * See Church Theme Content plugin for example usage:
  *
- * @package   CT_Options
+ * https://github.com/churchthemes/church-theme-content
+ * https://github.com/churchthemes/church-theme-content/blob/master/includes/admin/settings.php
+ *
+ * The CTPS_URL constant must be defined in order for JS/CSS to enqueue.
+ *
+ * @package   CT_Plugin_Settings
  * @copyright Copyright (c) 2013 - 2014, churchthemes.com
- * @link      https://github.com/churchthemes/ct-options
+ * @link      https://github.com/churchthemes/ct-plugin-settings
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
@@ -17,14 +21,14 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 // Class may be used in multiple plugins
-if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and plugin
+if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both theme and plugin
 
 	/**
 	 * Main class
 	 *
 	 * @since 0.6
 	 */
-	class CT_Options {
+	class CT_Plugin_Settings {
 
 		/**
 		 * Plugin version
@@ -43,6 +47,22 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 		public $config;
 
 		/**
+		 * Plugin file base
+		 *
+		 * @since 0.7
+		 * @var array
+		 */
+		public $plugin_file_base;
+
+		/**
+		 * Plugin's directory name
+		 *
+		 * @since 0.7
+		 * @var array
+		 */
+		public $plugin_dirname;
+
+		/**
 		 * Fields data
 		 *
 		 * @since 0.6
@@ -59,22 +79,17 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 		 */
 		public function __construct( $config ) {
 
-			// Version - used in cache busting
+			// Version
 			$this->version = '0.7';
 
-			// Config
-			$this->config = $config;
-
-			// Prepare fields
-			$this->prepare_fields();
+			// Prepare data
+			$this->prepare_data( $config );
 
 			// Add page
 			add_action( 'admin_menu', array( &$this, 'add_page' ) );
 
 			// Add plugin action link (Plugins page)
-			if ( ! empty( $config['plugin_file'] ) ) {
-				add_filter( 'plugin_action_links_' . plugin_basename( $config['plugin_file'] ), array( &$this, 'add_plugin_action_link' ) );
-			}
+			add_filter( 'plugin_action_links_' . $this->plugin_file_base, array( &$this, 'add_plugin_action_link' ) );
 
 			// Add fields
 			add_action( 'admin_init', array( &$this, 'add_fields' ) );
@@ -88,9 +103,29 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 		}
 
 		/**
+		 * Prepare Data
+		 *
+		 * @since 0.7
+		 * @param array $config Settings configuration
+		 */
+		public function prepare_data( $config ) {
+
+			// Make config available
+			$this->config = $config;
+
+			// Prepare plugin data
+			$this->plugin_file_base = plugin_basename( $this->config['plugin_file'] );	// plugin-name/plugin-name.php
+			$this->plugin_dirname = dirname( $this->plugin_file_base );					// plugin-name (useful for menu slug)
+
+			// Prepare fields
+			$this->prepare_fields();
+
+		}
+
+		/**
 		 * Prepare Fields
 		 *
-		 * Convert options config into simple key => value array, without sections
+		 * Convert settings config into simple key => value array, without sections
 		 *
 		 * @since 0.6
 		 * @access public
@@ -103,13 +138,18 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 			$sections = $this->config['sections'];
 			foreach( $sections as $section_key => $section ) {
 
-				// Loop options in section
+				// Loop fields in section
 				if ( ! empty( $section['fields'] ) ) {
+
 					foreach( $section['fields'] as $field_id => $field_config ) {
+
 						$field_config['id'] = $field_id; // set key as ID in field config
 						$field_config['section'] = $section_key; // make section easily accessible
+
 						$this->fields[$field_id] = $field_config;
+
 					}
+
 				}
 
 			}
@@ -131,7 +171,7 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 				$this->config['page_title'],		// text shown in window title
 				$this->config['menu_title'], 		// text shown in menu
 				'manage_options', 					// role/capability with access
-				$this->config['menu_slug'],			// unique menu/page slug
+				$this->plugin_dirname,				// unique menu/page slug
 				array( &$this, 'page_content' )		// callback providing output for page
 			);
 
@@ -140,7 +180,7 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 		/**
 		 * Add Plugin Action Link
 		 *
-		 * This will add a "Settings" link to plugin list
+		 * This will insert a "Settings" link into the plugin's action links (Plugin page's list)
 		 *
 		 * @since 0.7
 		 * @access public
@@ -149,8 +189,12 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 		 */
 		public function add_plugin_action_link( $links ) {
 
+			// Have links array?
 			if ( is_array( $links ) ) {
-				$links[] = '<a href="' . admin_url( 'options-general.php?page=' . $this->config['menu_slug'] ) . '">' . __( 'Settings', 'plugin action link', 'ct-options' ) . '</a>';
+
+				// Append "Settings" link
+				$links[] = '<a href="' . admin_url( 'options-general.php?page=' . $this->plugin_dirname ) . '">' . __( 'Settings', 'plugin action link', 'ct-plugin-settings' ) . '</a>';
+
 			}
 
 			return $links;
@@ -170,7 +214,7 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 				$this->config['option_id'], 			// section ID (using same as master option ID)
 				'', 									// title of section (none since one section used for all)
 				array( &$this, 'settings_content' ),	// callback that produces output above setting fields
-				$this->config['menu_slug'] 				// menu page
+				$this->plugin_dirname 					// menu page
 			);
 
 			// Add fields from config
@@ -180,7 +224,7 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 					$id,
 					! empty( $field['name'] ) ? $field['name'] : '',
 					array( &$this, 'field_content' ),	// callback for rendering the field
-					$this->config['menu_slug'],			// menu page
+					$this->plugin_dirname,				// menu page
 					$this->config['option_id'],			// settings section (same name as master option since one used for all fields)
 					array(								// arguments to pass to field_content callback
 						$id,
@@ -202,7 +246,7 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 		/**
 		 * Enqueue Stylesheets
 		 *
-		 * Load stylesheets only when option page is being shown.
+		 * Load stylesheets only when settings page is being shown.
 		 *
 		 * @since 0.6
 		 * @access public
@@ -210,8 +254,8 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 		public function enqueue_styles() {
 
 			// Don't load where not needed
-			if ( $this->is_options_page() ) {
-				wp_enqueue_style( 'ct-options', trailingslashit( CTO_URL ) . 'css/ct-options.css', false, $this->version ); // bust cache on update
+			if ( $this->is_settings_page() ) {
+				wp_enqueue_style( 'ct-plugin-settings', trailingslashit( CTPS_URL ) . 'css/style.css', false, $this->version ); // bust cache on update
 			}
 
 		}
@@ -227,8 +271,8 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 		public function enqueue_scripts() {
 
 			// Don't load where not needed
-			if ( $this->is_options_page() ) {
-				wp_enqueue_script( 'ct-options', trailingslashit( CTO_URL ) . 'js/ct-options.js', false, $this->version ); // bust cache on update
+			if ( $this->is_settings_page() ) {
+				wp_enqueue_script( 'ct-plugin-settings', trailingslashit( CTPS_URL ) . 'js/main.js', false, $this->version ); // bust cache on update
 			}
 
 		}
@@ -236,7 +280,7 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 		/**
 		 * Page Content
 		 *
-		 * This displays the option page tabs and fields.
+		 * This displays the settings page tabs and fields.
 		 *
 		 * @since 0.6
 		 * @access public
@@ -245,27 +289,29 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 
 			// Output contents
 			?>
-			<div id="cto-content" class="wrap">
+			<div id="ctps-content" class="wrap">
 
 				<h2><?php echo esc_html( $this->config['page_title'] ); ?></h2>
 
 				<?php settings_errors(); ?>
 
-				<h2 id="cto-tabs" class="nav-tab-wrapper">
+				<h2 id="ctps-tabs" class="nav-tab-wrapper">
 
 					<?php foreach( $this->config['sections'] as $slug => $section ) : ?>
+
 						<a href="#<?php echo esc_attr( $slug ); ?>" data-section="<?php echo esc_attr( $slug ); ?>" class="nav-tab"><?php echo esc_html( $section['title'] ); ?></a>
+
 					<?php endforeach; ?>
 
 				</h2>
 
-				<form id="cto-form" method="post" action="options.php">
+				<form id="ctps-form" method="post" action="options.php">
 
-					<?php
-					settings_fields( $this->config['option_id'] );
-					do_settings_sections( $this->config['menu_slug'] );
-					submit_button();
-					?>
+					<?php settings_fields( $this->config['option_id'] ); ?>
+
+					<?php do_settings_sections( $this->plugin_dirname ); ?>
+
+					<?php submit_button(); ?>
 
 				</form>
 
@@ -277,7 +323,7 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 		/**
 		 * Settings Content
 		 *
-		 * Output will appear above the option fields.
+		 * Output will appear above the fields.
 		 *
 		 * @since 0.6
 		 * @access public
@@ -308,8 +354,9 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 			// Prepare strings
 			$data['value'] = $this->get( $data['id'] );
 			$data['esc_value'] = esc_attr( $this->get( $data['id'] ) );
-			$data['esc_element_id'] = 'cto-field-' . esc_attr( $data['id'] );
+			$data['esc_element_id'] = 'ctps-field-' . esc_attr( $data['id'] );
 
+			// Default classes
 			// Prepare styles for elements (core WP styling)
 			$default_classes = array(
 				'text'		=> 'regular-text',
@@ -319,22 +366,31 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 				'select'	=> '',
 				'number'	=> 'small-text'
 			);
+
+			// Build classes array
 			$classes = array();
-			$classes[] = 'cto-' . $data['field']['type'];
-			if ( ! empty( $default_classes[$data['field']['type']] ) ) {
-				$classes[] = $default_classes[$data['field']['type']];
-			}
-			if ( ! empty( $data['field']['class'] ) ) {
-				$classes[] = $data['field']['class'];
-			}
+
+				$classes[] = 'ctps-' . $data['field']['type'];
+
+				if ( ! empty( $default_classes[$data['field']['type']] ) ) {
+					$classes[] = $default_classes[$data['field']['type']];
+				}
+
+				if ( ! empty( $data['field']['class'] ) ) {
+					$classes[] = $data['field']['class'];
+				}
+
+			// Build classes string
 			$data['classes'] = implode( ' ', $classes );
 
 			// Common attributes
 			$data['common_atts'] = 'name="' . esc_attr( $this->config['option_id'] . '[' . $data['id'] . ']' ) . '" class="' . esc_attr( $data['classes'] ) . '"';
 			if ( ! empty( $data['field']['attributes'] ) ) { // add custom attributes
+
 				foreach( $data['field']['attributes'] as $attr_name => $attr_value ) {
 					$data['common_atts'] .= ' ' . $attr_name . '="' . esc_attr( $attr_value ) . '"';
 				}
+
 			}
 
 			// Use custom function to output field
@@ -345,8 +401,9 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 			// Standard output based on type
 			else {
 
-				// Switch thru types to render differently
 				$html = '';
+
+				// Switch thru types to render differently
 				switch ( $data['field']['type'] ) {
 
 					// Text
@@ -369,11 +426,15 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 					case 'checkbox':
 
 						$html  = '<input type="hidden" ' . $data['common_atts'] . ' value="" />'; // causes unchecked box to post empty value (helps with default handling)
+
 						$html .= '<label for="' . $data['esc_element_id'] . '">';
+
 						$html .= '	<input type="checkbox" ' . $data['common_atts'] . ' id="' . $data['esc_element_id'] . '" value="1"' . checked( '1', $data['value'], false ) . '/>';
+
 						if ( ! empty( $data['field']['checkbox_label'] ) ) {
 							$html .= ' ' . $data['field']['checkbox_label'];
 						}
+
 						$html .= '</label>';
 
 						break;
@@ -405,9 +466,11 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 						if ( ! empty( $data['field']['options'] ) ) {
 
 							$html .= '<select ' . $data['common_atts'] . ' id="' . $data['esc_element_id'] . '">';
+
 							foreach( $data['field']['options'] as $option_value => $option_text ) {
 								$html .= '<option value="' . esc_attr( $option_value ) . '" ' . selected( $option_value, $data['value'], false ) . '> ' . esc_html( $option_text ) . '</option>';
 							}
+
 							$html .= '</select>';
 
 						}
@@ -431,17 +494,17 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 			}
 
 			// Wrap field
-			$html = '<div class="cto-section-' . esc_attr( $this->fields[$data['id']]['section'] ) . '"> ' . $html . '</div>';
+			$html = '<div class="ctps-section-' . esc_attr( $this->fields[$data['id']]['section'] ) . '"> ' . $html . '</div>';
 
 			// Output filterable
-			echo apply_filters( 'cto_field_content', $html, $args );
+			echo apply_filters( 'ctps_field_content', $html, $args );
 
 		}
 
 		/**
 		 * Sanitization
 		 *
-		 * Sanitize values before saving. Also handles restoring defaults.
+		 * Sanitize values before saving.
 		 *
 		 * @since 0.6
 		 * @access public
@@ -459,7 +522,7 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 			// Loop values
 			foreach( $input as $key => $value ) {
 
-				// Sanitization for all
+				// Trim all values
 				$value = trim( stripslashes( $value ) );
 
 				// Sanitize based on type
@@ -472,7 +535,7 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 
 						// Strip tags if config does not allow HTML
 						if ( empty( $this->fields[$key]['allow_html'] ) ) {
-							$value = trim( strip_tags( $value ) );
+							$value = trim( wp_strip_all_tags( $value ) );
 						}
 
 						// Sanitize HTML in case used (remove evil tags like script, iframe) - same as post content
@@ -522,7 +585,7 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 			}
 
 			// Return clean values, make filterable
-			return apply_filters( 'cto_sanitize', $output, $input );
+			return apply_filters( 'ctps_sanitize', $output, $input );
 
 		}
 
@@ -535,22 +598,22 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 		 * @access public
 		 * @return bool True if on options page
 		 */
-		public function is_options_page() {
+		public function is_settings_page() {
 
 			$screen = get_current_screen();
 
-			$is_options_page = false;
+			$is_settings_page = false;
 
-			if ( preg_match( '/^.*_' . $this->config['menu_slug'] . '$/', $screen->base ) ) {
-				$is_options_page = true;
+			if ( 'settings_page_' . $this->plugin_dirname == $screen->id ) {
+				$is_settings_page = true;
 			}
 
-			return apply_filters( 'cto_is_options_page', $is_options_page );
+			return apply_filters( 'ctps_is_settings_page', $is_settings_page );
 
 		}
 
 		/**
-		 * Get Option
+		 * Get Setting
 		 *
 		 * The plugin should wrap this in its own setting getter for more convenient use.
 		 * This also handles returning defaults if necessary.
@@ -560,18 +623,18 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 		 * @param string $option Setting slug
 		 * @return mixed Value of setting
 		 */
-		public function get( $option ) {
+		public function get( $setting ) {
 
 			$value = '';
 
-			// Get options array to pull value from
+			// Get options array of settings to pull value from
 			$options = get_option( $this->config['option_id'] );
 
 			// Get default value
-			$default = isset( $this->fields[$option]['default'] ) ? $this->fields[$option]['default'] : '';
+			$default = isset( $this->fields[$setting]['default'] ) ? $this->fields[$setting]['default'] : '';
 
-			// Option not saved - use default value
-			if ( ! isset( $options[$option] ) ) {
+			// Setting not saved - use default value
+			if ( ! isset( $options[$setting] ) ) {
 				$value = $default;
 			}
 
@@ -579,19 +642,19 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 			else {
 
 				// Value is empty when not allowed, set default (no_empty true or is radio)
-				if ( empty( $options[$option] ) && ( ! empty( $this->fields[$option]['no_empty'] ) || 'radio' == $this->fields[$option]['type'] ) ) {
+				if ( empty( $options[$setting] ) && ( ! empty( $this->fields[$setting]['no_empty'] ) || 'radio' == $this->fields[$setting]['type'] ) ) {
 					$value = $default;
 				}
 
 				// Otherwise, stick with current value
 				else {
-					$value = $options[$option];
+					$value = $options[$setting];
 				}
 
 			}
 
 			// Return filterable
-			return apply_filters( 'cto_get', $value, $option );
+			return apply_filters( 'ctps_get', $value, $setting );
 
 		}
 

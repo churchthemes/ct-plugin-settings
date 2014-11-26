@@ -1,5 +1,5 @@
 /**
- * CT Options Styles
+ * CT Plugin Settings Styles
  */
 
 /**********************************************
@@ -8,15 +8,15 @@
 
 /* Hide tabs and form before load */
 
-#cto-tabs,
-#cto-form,
-#cto-form tr {
+#ctps-tabs,
+#ctps-form,
+#ctps-form tr {
 	display: none;
 }
 
 /* Input */
 
-.cto-textarea {
+.ctps-textarea {
 	width: 400px;
 	height: 100px;
 }

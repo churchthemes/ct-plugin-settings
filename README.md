@@ -1,8 +1,11 @@
-CT Options
-==========
+CT Plugin Settings
+==================
 
-A basic options class for WordPress themes and plugins.
+CT Plugin Settings is a class for generating a tabbed settings page in WordPress plugins.
 
-This is no longer maintained. Development may pick up again if ever our plugins need options. Themes are better off using the built-in Customizer.
+It is included as a library in the [Church Theme Content](https://github.com/churchthemes/church-theme-content) plugin.
+If you wish to use it, see the plugin for a complete implementation ([settings.php](https://github.com/churchthemes/church-theme-content/blob/master/includes/admin/settings.php)).
 
-Licensed under the GPL.
+This was formerly named CT Options.
+
+License: GNU GPLv2
