@@ -7,16 +7,16 @@
  **********************************************/
 
 /* Hide tabs and form before load */
- 
-#ctoptions-tabs,
-#ctoptions-form,
-#ctoptions-form tr {
+
+#cto-tabs,
+#cto-form,
+#cto-form tr {
 	display: none;
 }
 
 /* Input */
 
-.ctoptions-textarea {
+.cto-textarea {
 	width: 400px;
 	height: 100px;
 }
