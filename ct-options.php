@@ -579,7 +579,7 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 			else {
 
 				// Value is empty when not allowed, set default (no_empty true or is radio)
-				if ( empty( $options[$option] ) && ( ! empty( $this->fields[$option]['no_empty'] ) || 'radio' == $$this->fields[$option]['type'] ) ) {
+				if ( empty( $options[$option] ) && ( ! empty( $this->fields[$option]['no_empty'] ) || 'radio' == $this->fields[$option]['type'] ) ) {
 					$value = $default;
 				}
 
