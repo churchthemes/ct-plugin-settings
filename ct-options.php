@@ -5,6 +5,9 @@
  * This makes it easy to setup tabbed option pages for plugins.
  */
 
+// No direct access
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and plugin
 
 	class CT_Options {
