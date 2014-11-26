@@ -71,6 +71,11 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 			// Add page
 			add_action( 'admin_menu', array( &$this, 'add_page' ) );
 
+			// Add plugin action link (Plugins page)
+			if ( ! empty( $config['plugin_file'] ) ) {
+				add_filter( 'plugin_action_links_' . plugin_basename( $config['plugin_file'] ), array( &$this, 'add_plugin_action_link' ) );
+			}
+
 			// Add fields
 			add_action( 'admin_init', array( &$this, 'add_fields' ) );
 
@@ -114,6 +119,8 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 		/**
 		 * Add Page
 		 *
+		 * This will add a link to the Settings menu
+		 *
 		 * @since 0.7
 		 * @access public
 		 */
@@ -127,6 +134,26 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 				$this->config['menu_slug'],			// unique menu/page slug
 				array( &$this, 'page_content' )		// callback providing output for page
 			);
+
+		}
+
+		/**
+		 * Add Plugin Action Link
+		 *
+		 * This will add a "Settings" link to plugin list
+		 *
+		 * @since 0.7
+		 * @access public
+		 * @param array $links Existing action links
+		 * @return array Modified action links
+		 */
+		public function add_plugin_action_link( $links ) {
+
+			if ( is_array( $links ) ) {
+				$links[] = '<a href="' . admin_url( 'options-general.php?page=' . $this->config['menu_slug'] ) . '">' . __( 'Settings', 'plugin action link', 'ct-options' ) . '</a>';
+			}
+
+			return $links;
 
 		}
 

@@ -1,0 +1,22 @@
+/**
+ * CT Options Styles
+ */
+
+/**********************************************
+ * OPTIONS
+ **********************************************/
+
+/* Hide tabs and form before load */
+
+#cto-tabs,
+#cto-form,
+#cto-form tr {
+	display: none;
+}
+
+/* Input */
+
+.cto-textarea {
+	width: 400px;
+	height: 100px;
+}
