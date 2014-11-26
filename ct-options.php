@@ -184,7 +184,7 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 
 			// Don't load where not needed
 			if ( $this->is_options_page() ) {
-				wp_enqueue_style( 'ct-options', trailingslashit( CTO_URL ) . 'ct-options.css', false, $this->version ); // bust cache on update
+				wp_enqueue_style( 'ct-options', trailingslashit( CTO_URL ) . 'css/ct-options.css', false, $this->version ); // bust cache on update
 			}
 
 		}
@@ -201,7 +201,7 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 
 			// Don't load where not needed
 			if ( $this->is_options_page() ) {
-				wp_enqueue_script( 'ct-options', trailingslashit( CTO_URL ) . 'ct-options.js', false, $this->version ); // bust cache on update
+				wp_enqueue_script( 'ct-options', trailingslashit( CTO_URL ) . 'js/ct-options.js', false, $this->version ); // bust cache on update
 			}
 
 		}
