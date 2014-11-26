@@ -1,18 +1,63 @@
 <?php
 /**
- * CT Options Class
+ * CT Options
  *
- * This makes it easy to setup tabbed option pages for plugins.
+ * This class generates a settings page for plugins.
+ *
+ * The CTO_URL constant must be defined in order for JS/CSS to enqueue.
+ * See Church Theme Content plugin for example usage.
+ *
+ * @package   CT_Options
+ * @copyright Copyright (c) 2013 - 2014, churchthemes.com
+ * @link      https://github.com/churchthemes/ct-options
+ * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
 // No direct access
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+// Class may be used in multiple plugins
 if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and plugin
 
+	/**
+	 * Main class
+	 *
+	 * @since 0.6
+	 */
 	class CT_Options {
 
-		function __construct( $config ) {
+		/**
+		 * Plugin version
+		 *
+		 * @since 0.6
+		 * @var string
+		 */
+		public $version;
+
+		/**
+		 * Settings configuration
+		 *
+		 * @since 0.6
+		 * @var array
+		 */
+		public $config;
+
+		/**
+		 * Fields data
+		 *
+		 * @since 0.6
+		 * @var array
+		 */
+		public $fields;
+
+		/**
+		 * Constructor
+		 *
+		 * @since 0.6
+		 * @access public
+		 * @param array $config Configuration for settings page, menu and fields
+		 */
+		public function __construct( $config ) {
 
 			// Version - used in cache busting
 			$this->version = '0.7';
@@ -43,8 +88,9 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 		 * Convert options config into simple key => value array, without sections
 		 *
 		 * @since 0.6
+		 * @access public
 		 */
-		function prepare_fields() {
+		public function prepare_fields() {
 
 			$this->fields = array();
 
@@ -69,8 +115,9 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 		 * Add Page
 		 *
 		 * @since 0.7
+		 * @access public
 		 */
-		function add_page() {
+		public function add_page() {
 
 			// Add options page to menu
 			add_options_page(
@@ -87,8 +134,9 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 		 * Add Fields
 		 *
 		 * @since 0.6
+		 * @access public
 		 */
-		function add_fields() {
+		public function add_fields() {
 
 			// Add section for all options on the page
 			add_settings_section(
@@ -130,14 +178,13 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 		 * Load stylesheets only when option page is being shown.
 		 *
 		 * @since 0.6
+		 * @access public
 		 */
-		function enqueue_styles() {
+		public function enqueue_styles() {
 
 			// Don't load where not needed
 			if ( $this->is_options_page() ) {
-
 				wp_enqueue_style( 'ct-options', trailingslashit( CTO_URL ) . 'ct-options.css', false, $this->version ); // bust cache on update
-
 			}
 
 		}
@@ -148,14 +195,13 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 		 * Load scripts only when option page is being shown.
 		 *
 		 * @since 0.6
+		 * @access public
 		 */
-		function enqueue_scripts() {
+		public function enqueue_scripts() {
 
 			// Don't load where not needed
 			if ( $this->is_options_page() ) {
-
 				wp_enqueue_script( 'ct-options', trailingslashit( CTO_URL ) . 'ct-options.js', false, $this->version ); // bust cache on update
-
 			}
 
 		}
@@ -166,8 +212,9 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 		 * This displays the option page tabs and fields.
 		 *
 		 * @since 0.6
+		 * @access public
 		 */
-		function page_content() {
+		public function page_content() {
 
 			// Output contents
 			?>
@@ -178,9 +225,11 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 				<?php settings_errors(); ?>
 
 				<h2 id="cto-tabs" class="nav-tab-wrapper">
+
 					<?php foreach( $this->config['sections'] as $slug => $section ) : ?>
-					<a href="#<?php echo esc_attr( $slug ); ?>" data-section="<?php echo esc_attr( $slug ); ?>" class="nav-tab"><?php echo esc_html( $section['title'] ); ?></a>
+						<a href="#<?php echo esc_attr( $slug ); ?>" data-section="<?php echo esc_attr( $slug ); ?>" class="nav-tab"><?php echo esc_html( $section['title'] ); ?></a>
 					<?php endforeach; ?>
+
 				</h2>
 
 				<form id="cto-form" method="post" action="options.php">
@@ -204,8 +253,9 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 		 * Output will appear above the option fields.
 		 *
 		 * @since 0.6
+		 * @access public
 		 */
-		function settings_content() {
+		public function settings_content() {
 
 			// Nothing
 
@@ -217,9 +267,10 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 		 * Render output for a field based on its type as specified in $field from config
 		 *
 		 * @since 0.6
+		 * @access public
 		 * @param array $args Field arguments
 		 */
-		function field_content( $args ) {
+		public function field_content( $args ) {
 
 			$data = array();
 
@@ -366,10 +417,12 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 		 * Sanitize values before saving. Also handles restoring defaults.
 		 *
 		 * @since 0.6
+		 * @access public
 		 * @param array $input Values being saved
 		 * @return array Sanitized values
+		 * @global array $allowedposttags;
 		 */
-		function sanitize( $input ) {
+		public function sanitize( $input ) {
 
 			global $allowedposttags;
 
@@ -452,9 +505,10 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 		 * Are we on the options page for the plugin?
 		 *
 		 * @since 0.6
+		 * @access public
 		 * @return bool True if on options page
 		 */
-		function is_options_page() {
+		public function is_options_page() {
 
 			$screen = get_current_screen();
 
@@ -475,10 +529,11 @@ if ( ! class_exists( 'CT_Options' ) ) { // in case class used in both theme and 
 		 * This also handles returning defaults if necessary.
 		 *
 		 * @since 0.6
+		 * @access public
 		 * @param string $option Setting slug
 		 * @return mixed Value of setting
 		 */
-		function get( $option ) {
+		public function get( $option ) {
 
 			$value = '';
 
