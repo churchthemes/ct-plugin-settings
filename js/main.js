@@ -20,7 +20,7 @@ jQuery( document ).ready( function( $ ) {
 	ctps_switch_section( section );
 
 	// Now show tabs + form after initial setup
-	$( '#ctps-tabs, #ctps-form' ).fadeIn();
+	$( '#ctps-tabs, #ctps-form' ).fadeIn( 'fast' );
 
 	// Change tab/section on click
 	$( '#ctps-tabs .nav-tab' ).click( function() {
@@ -80,7 +80,7 @@ function ctps_switch_section( section ) {
 	jQuery( '#ctps-form tr' ).each( function() {
 
 		if ( jQuery( '.ctps-section-' + section, this ).length ) { // show row if it has setting belonging to section
-			jQuery( this ).fadeIn();
+			jQuery( this ).fadeIn( 'fast' );
 		}
 
 	} );
