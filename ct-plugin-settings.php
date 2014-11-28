@@ -193,7 +193,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 			if ( is_array( $links ) ) {
 
 				// Append "Settings" link
-				$links[] = '<a href="' . admin_url( 'options-general.php?page=' . $this->plugin_dirname ) . '">' . __( 'Settings', 'plugin action link', 'ct-plugin-settings' ) . '</a>';
+				$links[] = '<a href="' . admin_url( 'options-general.php?page=' . $this->plugin_dirname ) . '">' . __( 'Settings' ) . '</a>'; // use core WP 'Settings' string for this class to be plugin-agnostic
 
 			}
 
