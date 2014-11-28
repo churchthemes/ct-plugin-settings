@@ -335,7 +335,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 
 					// JavaScript will show the desription for the active tab
 					if ( ! empty( $section['desc'] ) ) {
-						echo '<p id="ctps-section-desc-' . $section_slug . '" class="ctps-section-desc">' . $section['desc'] . '</p>';
+						echo '<p id="ctps-section-desc-' . esc_attr( $section_slug ) . '" class="ctps-section-desc">' . $section['desc'] . '</p>';
 					}
 
 				}
@@ -549,7 +549,9 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 						}
 
 						// Sanitize HTML in case used (remove evil tags like script, iframe) - same as post content
-						$value = stripslashes( wp_filter_post_kses( addslashes( $value ), $allowedposttags ) );
+						if ( ! current_user_can( 'unfiltered_html' ) ) { // admin only
+							$value = stripslashes( wp_filter_post_kses( addslashes( $value ), $allowedposttags ) );
+						}
 
 						break;
 
