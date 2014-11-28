@@ -75,6 +75,10 @@ function ctps_switch_section( section ) {
 	jQuery( '#ctps-tabs .nav-tab' ).removeClass( 'nav-tab-active' );
 	jQuery( "#ctps-tabs .nav-tab[data-section^='" + section + "']" ).addClass( 'nav-tab-active' );
 
+	// Show description
+	jQuery( '.ctps-section-desc' ).hide(); // hide others
+	jQuery( '#ctps-section-desc-' + section ).fadeIn( 'fast' );
+
 	// Show settings
 	jQuery( '#ctps-form tr' ).hide(); // hide others
 	jQuery( '#ctps-form tr' ).each( function() {

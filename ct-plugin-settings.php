@@ -328,7 +328,19 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 		 */
 		public function settings_content() {
 
-			// Nothing above fields (below tabs)
+			if ( ! empty( $this->config['sections'] ) ) {
+
+				// Output description for each section
+				foreach( $this->config['sections'] as $section_slug => $section ) {
+
+					// JavaScript will show the desription for the active tab
+					if ( ! empty( $section['desc'] ) ) {
+						echo '<p id="ctps-section-desc-' . $section_slug . '" class="ctps-section-desc">' . $section['desc'] . '</p>';
+					}
+
+				}
+
+			}
 
 		}
 

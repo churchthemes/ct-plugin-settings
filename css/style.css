@@ -6,7 +6,8 @@
 
 #ctps-tabs,
 #ctps-form,
-#ctps-form tr {
+#ctps-form tr,
+.ctps-section-desc {
 	display: none;
 }
 
