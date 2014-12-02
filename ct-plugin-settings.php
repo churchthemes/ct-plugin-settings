@@ -63,6 +63,14 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 		public $plugin_dirname;
 
 		/**
+		 * Sections data
+		 *
+		 * @since 0.9
+		 * @var array
+		 */
+		public $sections;
+
+		/**
 		 * Fields data
 		 *
 		 * @since 0.6
@@ -80,7 +88,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 		public function __construct( $config ) {
 
 			// Version
-			$this->version = '0.8';
+			$this->version = '0.9';
 
 			// Prepare data
 			$this->prepare_data( $config );
@@ -117,8 +125,33 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 			$this->plugin_file_base = plugin_basename( $this->config['plugin_file'] );	// plugin-name/plugin-name.php
 			$this->plugin_dirname = dirname( $this->plugin_file_base );					// plugin-name (useful for menu slug)
 
+			// Prepare sections
+			$this->prepare_sections();
+
 			// Prepare fields
 			$this->prepare_fields();
+
+		}
+
+		/**
+		 * Prepare Sections
+		 *
+		 * Make them filterable
+		 *
+		 * @since 0.9
+		 * @access public
+		 */
+		public function prepare_sections() {
+
+			$this->sections = $this->config['sections'];
+
+			// Filter sections
+			$this->sections = apply_filters( 'ctps_sections', $this->sections );
+
+			// Filter individual sections
+			foreach( $this->sections as $section_key => $section ) {
+				$this->sections[$section_key] = apply_filters( 'ctps_section-' . $section_key, $section );
+			}
 
 		}
 
@@ -134,17 +167,8 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 
 			$this->fields = array();
 
-			// Get sections
-			$sections = $this->config['sections'];
-
-			// Filter sections
-			$sections = apply_filters( 'ctps_sections', $sections );
-
 			// Add fields from config
-			foreach( $sections as $section_key => $section ) {
-
-				// Filter specific section
-				$section = apply_filters( 'ctps_section-' . $section_key, $section );
+			foreach( $this->sections as $section_key => $section ) {
 
 				// Get fields for section
 				$fields = isset( $section['fields'] ) ? (array) $section['fields'] : arrray();
@@ -306,7 +330,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 
 				<h2 id="ctps-tabs" class="nav-tab-wrapper">
 
-					<?php foreach( $this->config['sections'] as $slug => $section ) : ?>
+					<?php foreach( $this->sections as $slug => $section ) : ?>
 
 						<a href="#<?php echo esc_attr( $slug ); ?>" data-section="<?php echo esc_attr( $slug ); ?>" class="nav-tab"><?php echo esc_html( $section['title'] ); ?></a>
 
@@ -339,10 +363,10 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 		 */
 		public function settings_content() {
 
-			if ( ! empty( $this->config['sections'] ) ) {
+			if ( ! empty( $this->sections ) ) {
 
 				// Output description for each section
-				foreach( $this->config['sections'] as $section_slug => $section ) {
+				foreach( $this->sections as $section_slug => $section ) {
 
 					// JavaScript will show the desription for the active tab
 					if ( ! empty( $section['desc'] ) ) {
