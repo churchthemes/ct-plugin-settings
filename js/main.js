@@ -89,6 +89,14 @@ function ctps_switch_section( section ) {
 
 	} );
 
+	// Show button only if section has fields
+	// Add-on Licenses section will always begin empty
+	if ( jQuery( '.ctps-section-' + section + ' .ctps-field' ).length ) {
+		jQuery( '#ctps-form .submit' ).show();
+	} else {
+		jQuery( '#ctps-form .submit' ).hide();
+	}
+
 	// Add hash
 	jQuery( '#ctps-form' ).attr( 'action', 'options.php#' + section ); // add to <form> post so tab stays same
 	window.location.hash = section; // always show hash (such as first load w/none)

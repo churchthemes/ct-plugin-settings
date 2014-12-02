@@ -388,6 +388,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 			// Build classes array
 			$classes = array();
 
+				$classes[] = 'ctps-field';
 				$classes[] = 'ctps-' . $data['field']['type'];
 
 				if ( ! empty( $default_classes[$data['field']['type']] ) ) {
@@ -512,7 +513,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 			}
 
 			// Wrap field
-			$html = '<div class="ctps-section-' . esc_attr( $this->fields[$data['id']]['section'] ) . '"> ' . $html . '</div>';
+			$html = '<div class="ctps-section ctps-section-' . esc_attr( $this->fields[$data['id']]['section'] ) . '"> ' . $html . '</div>';
 
 			// Output filterable
 			echo apply_filters( 'ctps_field_content', $html, $args );
