@@ -150,8 +150,8 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 					$fields = $section['fields'];
 
 					// Filter fields
-					$fields = apply_filters( 'ctps_fields', $section, $fields );
-					$fields = apply_filters( 'ctps_fields-' . $section, $fields );
+					$fields = apply_filters( 'ctps_fields', $fields, $section_key );
+					$fields = apply_filters( 'ctps_fields-' . $section_key, $fields );
 
 					// Loop fields
 					foreach( $fields as $field_id => $field_config ) {
