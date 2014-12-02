@@ -143,25 +143,20 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 			// Add fields from config
 			foreach( $sections as $section_key => $section ) {
 
-				// Loop fields in section
-				if ( ! empty( $section['fields'] ) ) {
+				// Get fields for section
+				$fields = isset( $section['fields'] ) ? (array) $section['fields'] : arrray();
 
-					// Get fields for section
-					$fields = $section['fields'];
+				// Filter fields
+				$fields = apply_filters( 'ctps_fields', $fields, $section_key );
+				$fields = apply_filters( 'ctps_fields-' . $section_key, $fields );
 
-					// Filter fields
-					$fields = apply_filters( 'ctps_fields', $fields, $section_key );
-					$fields = apply_filters( 'ctps_fields-' . $section_key, $fields );
+				// Loop fields
+				foreach( $fields as $field_id => $field_config ) {
 
-					// Loop fields
-					foreach( $fields as $field_id => $field_config ) {
+					$field_config['id'] = $field_id; // set key as ID in field config
+					$field_config['section'] = $section_key; // make section easily accessible
 
-						$field_config['id'] = $field_id; // set key as ID in field config
-						$field_config['section'] = $section_key; // make section easily accessible
-
-						$this->fields[$field_id] = $field_config;
-
-					}
+					$this->fields[$field_id] = $field_config;
 
 				}
 
