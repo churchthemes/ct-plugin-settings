@@ -47,12 +47,12 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 		public $config;
 
 		/**
-		 * Plugin file base
+		 * Plugin file
 		 *
 		 * @since 0.7
 		 * @var array
 		 */
-		public $plugin_file_base;
+		public $plugin_file;
 
 		/**
 		 * Plugin's directory name
@@ -60,7 +60,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 		 * @since 0.7
 		 * @var array
 		 */
-		public $plugin_dirname;
+		public $plugin_dir;
 
 		/**
 		 * Sections data
@@ -97,7 +97,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 			add_action( 'admin_menu', array( &$this, 'add_page' ) );
 
 			// Add plugin action link (Plugins page)
-			add_filter( 'plugin_action_links_' . $this->plugin_file_base, array( &$this, 'add_plugin_action_link' ) );
+			add_filter( 'plugin_action_links_' . $this->plugin_file, array( &$this, 'add_plugin_action_link' ) );
 
 			// Add fields
 			add_action( 'admin_init', array( &$this, 'add_fields' ) );
@@ -122,8 +122,8 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 			$this->config = apply_filters( 'ctps_config', $config );
 
 			// Prepare plugin data
-			$this->plugin_file_base = plugin_basename( $this->config['plugin_file'] );	// plugin-name/plugin-name.php
-			$this->plugin_dirname = dirname( $this->plugin_file_base );					// plugin-name (useful for menu slug)
+			$this->plugin_file = plugin_basename( $this->config['plugin_file'] );	// plugin-name/plugin-name.php
+			$this->plugin_dir = dirname( $this->plugin_file );						// plugin-name (useful for menu slug)
 
 			// Prepare sections
 			$this->prepare_sections();
@@ -206,7 +206,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 				$this->config['page_title'],		// text shown in window title
 				$this->config['menu_title'], 		// text shown in menu
 				'manage_options', 					// role/capability with access
-				$this->plugin_dirname,				// unique menu/page slug
+				$this->plugin_dir,					// unique menu/page slug
 				array( &$this, 'page_content' )		// callback providing output for page
 			);
 
@@ -228,7 +228,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 			if ( is_array( $links ) ) {
 
 				// Append "Settings" link
-				$links[] = '<a href="' . admin_url( 'options-general.php?page=' . $this->plugin_dirname ) . '">' . __( 'Settings' ) . '</a>'; // use core WP 'Settings' string for this class to be plugin-agnostic
+				$links[] = '<a href="' . admin_url( 'options-general.php?page=' . $this->plugin_dir ) . '">' . __( 'Settings' ) . '</a>'; // use core WP 'Settings' string for this class to be plugin-agnostic
 
 			}
 
@@ -249,7 +249,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 				$this->config['option_id'], 			// section ID (using same as master option ID)
 				'', 									// title of section (none since one section used for all)
 				array( &$this, 'settings_content' ),	// callback that produces output above setting fields
-				$this->plugin_dirname 					// menu page
+				$this->plugin_dir 					// menu page
 			);
 
 			// Add fields from config
@@ -259,7 +259,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 					$id,
 					! empty( $field['name'] ) ? $field['name'] : '',
 					array( &$this, 'field_content' ),	// callback for rendering the field
-					$this->plugin_dirname,				// menu page
+					$this->plugin_dir,				// menu page
 					$this->config['option_id'],			// settings section (same name as master option since one used for all fields)
 					array(								// arguments to pass to field_content callback
 						$id,
@@ -342,7 +342,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 
 					<?php settings_fields( $this->config['option_id'] ); ?>
 
-					<?php do_settings_sections( $this->plugin_dirname ); ?>
+					<?php do_settings_sections( $this->plugin_dir ); ?>
 
 					<?php submit_button(); ?>
 
@@ -652,7 +652,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 
 			$is_settings_page = false;
 
-			if ( 'settings_page_' . $this->plugin_dirname == $screen->id ) {
+			if ( 'settings_page_' . $this->plugin_dir == $screen->id ) {
 				$is_settings_page = true;
 			}
 
