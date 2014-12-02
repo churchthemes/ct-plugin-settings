@@ -143,6 +143,9 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 			// Add fields from config
 			foreach( $sections as $section_key => $section ) {
 
+				// Filter specific section
+				$section = apply_filters( 'ctps_section-' . $section_key, $section );
+
 				// Get fields for section
 				$fields = isset( $section['fields'] ) ? (array) $section['fields'] : arrray();
 
