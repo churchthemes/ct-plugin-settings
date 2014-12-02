@@ -111,7 +111,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 		public function prepare_data( $config ) {
 
 			// Make config available
-			$this->config = $config;
+			$this->config = apply_filters( 'ctps_config', $config );
 
 			// Prepare plugin data
 			$this->plugin_file_base = plugin_basename( $this->config['plugin_file'] );	// plugin-name/plugin-name.php
@@ -134,14 +134,27 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 
 			$this->fields = array();
 
-			// Add fields from config
+			// Get sections
 			$sections = $this->config['sections'];
+
+			// Filter sections
+			$sections = apply_filters( 'ctps_sections', $sections );
+
+			// Add fields from config
 			foreach( $sections as $section_key => $section ) {
 
 				// Loop fields in section
 				if ( ! empty( $section['fields'] ) ) {
 
-					foreach( $section['fields'] as $field_id => $field_config ) {
+					// Get fields for section
+					$fields = $section['fields'];
+
+					// Filter fields
+					$fields = apply_filters( 'ctps_fields', $section, $fields );
+					$fields = apply_filters( 'ctps_fields-' . $section, $fields );
+
+					// Loop fields
+					foreach( $fields as $field_id => $field_config ) {
 
 						$field_config['id'] = $field_id; // set key as ID in field config
 						$field_config['section'] = $section_key; // make section easily accessible
