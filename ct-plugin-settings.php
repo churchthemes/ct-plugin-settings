@@ -3,13 +3,11 @@
  * CT Plugin Settings
  *
  * This class generates a tabbed settings page for WordPress plugins.
+ * It also provides a method for retieving settings while considering defaults.
  *
  * See Church Theme Content plugin for example usage:
  *
  * https://github.com/churchthemes/church-theme-content
- * https://github.com/churchthemes/church-theme-content/blob/master/includes/admin/settings.php
- *
- * The CTPS_URL constant must be defined in order for JS/CSS to enqueue.
  *
  * @package   CT_Plugin_Settings
  * @copyright Copyright (c) 2013 - 2014, churchthemes.com
@@ -249,7 +247,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 				$this->config['option_id'], 			// section ID (using same as master option ID)
 				'', 									// title of section (none since one section used for all)
 				array( &$this, 'settings_content' ),	// callback that produces output above setting fields
-				$this->plugin_dir 					// menu page
+				$this->plugin_dir 						// menu page
 			);
 
 			// Add fields from config
@@ -259,7 +257,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 					$id,
 					! empty( $field['name'] ) ? $field['name'] : '',
 					array( &$this, 'field_content' ),	// callback for rendering the field
-					$this->plugin_dir,				// menu page
+					$this->plugin_dir,					// menu page
 					$this->config['option_id'],			// settings section (same name as master option since one used for all fields)
 					array(								// arguments to pass to field_content callback
 						$id,
@@ -621,7 +619,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 
 				// Run additional custom sanitization function if config requires it
 				if ( ! empty( $this->fields[$key]['custom_sanitize'] ) ) {
-					$value = call_user_func( $this->fields[$key]['custom_sanitize'], $value );
+					$value = call_user_func( $this->fields[$key]['custom_sanitize'], $value, $this->fields[$key] );
 				}
 
 				// Final trim
@@ -675,14 +673,14 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 
 			$value = '';
 
-			// Get options array of settings to pull value from
-			$options = get_option( $this->config['option_id'] );
+			// Get option's array of settings to pull value from
+			$settings = get_option( $this->config['option_id'] );
 
 			// Get default value
 			$default = isset( $this->fields[$setting]['default'] ) ? $this->fields[$setting]['default'] : '';
 
 			// Setting not saved - use default value
-			if ( ! isset( $options[$setting] ) ) {
+			if ( ! isset( $settings[$setting] ) ) {
 				$value = $default;
 			}
 
@@ -690,13 +688,13 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 			else {
 
 				// Value is empty when not allowed, set default (no_empty true or is radio)
-				if ( empty( $options[$setting] ) && ( ! empty( $this->fields[$setting]['no_empty'] ) || 'radio' == $this->fields[$setting]['type'] ) ) {
+				if ( empty( $settings[$setting] ) && ( ! empty( $this->fields[$setting]['no_empty'] ) || 'radio' == $this->fields[$setting]['type'] ) ) {
 					$value = $default;
 				}
 
 				// Otherwise, stick with current value
 				else {
-					$value = $options[$setting];
+					$value = $settings[$setting];
 				}
 
 			}
