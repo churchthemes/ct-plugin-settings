@@ -218,6 +218,26 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 				array( &$this, 'page_content' )		// callback providing output for page
 			);
 
+			// Action after save
+			add_action( 'load-' . $this->page_hook_suffix, array( &$this, 'after_save' ) );
+
+		}
+
+		/**
+		 * After Save
+		 *
+		 * Provide an action that runs after save is done (after redirect to &settings-updated=true)
+		 *
+		 * @since 0.9
+		 * @access public
+		 */
+		public function after_save() {
+
+			// Plugin settings just saved
+			if ( $this->is_settings_page() && ! empty( $_GET['settings-updated'] ) ) {
+				do_action( 'ctps_after_save' );
+			}
+
 		}
 
 		/**
