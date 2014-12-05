@@ -77,6 +77,16 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 		public $fields;
 
 		/**
+		 * Settings page hook suffix
+		 *
+		 * This matches get_current_screen() base
+		 *
+		 * @since 0.9
+		 * @var string
+		 */
+		public $page_hook_suffix;
+
+		/**
 		 * Constructor
 		 *
 		 * @since 0.6
@@ -200,7 +210,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 		public function add_page() {
 
 			// Add options page to menu
-			add_options_page(
+			$this->page_hook_suffix = add_options_page(
 				$this->config['page_title'],		// text shown in window title
 				$this->config['menu_title'], 		// text shown in menu
 				'manage_options', 					// role/capability with access
@@ -650,7 +660,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 
 			$is_settings_page = false;
 
-			if ( 'settings_page_' . $this->plugin_dir == $screen->id ) {
+			if ( $this->page_hook_suffix == $screen->base ) {
 				$is_settings_page = true;
 			}
 
