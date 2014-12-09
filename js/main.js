@@ -71,6 +71,13 @@ jQuery( document ).ready( function( $ ) {
 
 function ctps_switch_section( section ) {
 
+	// Add class to <body>
+	// This is helpful for CSS based on section
+	jQuery( '#ctps-tabs .nav-tab' ).each( function() { // remove all first
+		jQuery( 'body' ).removeClass( 'ctps-active-section-' + jQuery( this ).attr( 'data-section' ) );
+	} );
+	jQuery( 'body' ).addClass( 'ctps-active-section-' + section );
+
 	// Activate tab
 	jQuery( '#ctps-tabs .nav-tab' ).removeClass( 'nav-tab-active' );
 	jQuery( "#ctps-tabs .nav-tab[data-section^='" + section + "']" ).addClass( 'nav-tab-active' );
