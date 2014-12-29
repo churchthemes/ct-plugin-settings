@@ -596,64 +596,76 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 			// Loop values
 			foreach( $input as $key => $value ) {
 
-				// Trim all values
-				$value = trim( stripslashes( $value ) );
-
-				// Sanitize based on type
-				switch ( $this->fields[$key]['type'] ) {
-
-					// Text
-					// Textarea
-					case 'text':
-					case 'textarea':
-
-						// Strip tags if config does not allow HTML
-						if ( empty( $this->fields[$key]['allow_html'] ) ) {
-							$value = trim( wp_strip_all_tags( $value ) );
-						}
-
-						// Sanitize HTML in case used (remove evil tags like script, iframe) - same as post content
-						if ( ! current_user_can( 'unfiltered_html' ) ) { // admin only
-							$value = stripslashes( wp_filter_post_kses( addslashes( $value ), $allowedposttags ) );
-						}
-
-						break;
-
-					// Checkbox
-					case 'checkbox':
-
-						$value = ! empty( $value ) ? '1' : '';
-
-						break;
-
-					// Radio
-					// Select
-					case 'radio':
-					case 'select':
-
-						// If option invalid, stick with current value
-						if ( ! isset( $this->fields[$key]['options'][$value] ) ) {
-							$value = $this->get( $key );
-						}
-
-						break;
-
-					// Number
-					case 'number':
-
-						$value = (int) $value; // force number
-
-						break;
-
+				// Invalid key
+				// It is possible a plugin providing a setting has been deactivated
+				// This avoids undefined index notice
+				if ( ! isset( $this->fields[$key] ) ) {
+					$value = '';
 				}
 
-				// Run additional custom sanitization function if config requires it
-				if ( ! empty( $this->fields[$key]['custom_sanitize'] ) ) {
-					$value = call_user_func( $this->fields[$key]['custom_sanitize'], $value, $this->fields[$key] );
-				}
+				// Valid key
+				else {
 
-				// Final trim
-				$value = trim( $value );
+					// Trim all values
+					$value = trim( stripslashes( $value ) );
+
+					// Sanitize based on type
+					switch ( $this->fields[$key]['type'] ) {
+
+						// Text
+						// Textarea
+						case 'text':
+						case 'textarea':
+
+							// Strip tags if config does not allow HTML
+							if ( empty( $this->fields[$key]['allow_html'] ) ) {
+								$value = trim( wp_strip_all_tags( $value ) );
+							}
+
+							// Sanitize HTML in case used (remove evil tags like script, iframe) - same as post content
+							if ( ! current_user_can( 'unfiltered_html' ) ) { // admin only
+								$value = stripslashes( wp_filter_post_kses( addslashes( $value ), $allowedposttags ) );
+							}
+
+							break;
+
+						// Checkbox
+						case 'checkbox':
+
+							$value = ! empty( $value ) ? '1' : '';
+
+							break;
+
+						// Radio
+						// Select
+						case 'radio':
+						case 'select':
+
+							// If option invalid, stick with current value
+							if ( ! isset( $this->fields[$key]['options'][$value] ) ) {
+								$value = $this->get( $key );
+							}
+
+							break;
+
+						// Number
+						case 'number':
+
+							$value = (int) $value; // force number
+
+							break;
+
+					}
+
+					// Run additional custom sanitization function if config requires it
+					if ( ! empty( $this->fields[$key]['custom_sanitize'] ) ) {
+						$value = call_user_func( $this->fields[$key]['custom_sanitize'], $value, $this->fields[$key] );
+					}
+
+					// Final trim
+					$value = trim( $value );
+
+				}
 
 				// Add to output array
 				$output[$key] = $value;
