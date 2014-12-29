@@ -356,6 +356,14 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 
 				<h2><?php echo esc_html( $this->config['page_title'] ); ?></h2>
 
+				<?php if ( ! empty( $this->config['desc'] ) ) : ?>
+
+					<p>
+						<?php echo $this->config['desc']; ?>
+					</p>
+
+				<?php endif; ?>
+
 				<h2 id="ctps-tabs" class="nav-tab-wrapper">
 
 					<?php foreach( $this->sections as $slug => $section ) : ?>
