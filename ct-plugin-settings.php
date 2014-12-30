@@ -96,7 +96,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 		public function __construct( $config ) {
 
 			// Version
-			$this->version = '0.9';
+			$this->version = '1.0';
 
 			// Prepare data
 			$this->prepare_data( $config );
