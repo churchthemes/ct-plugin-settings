@@ -285,7 +285,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 
 				add_settings_field(
 					$id,
-					! empty( $field['name'] ) ? $field['name'] : '',
+					! empty( $field['name'] ) ? esc_html( $field['name'] ) : '',
 					array( &$this, 'field_content' ),	// callback for rendering the field
 					$this->plugin_dir,					// menu page
 					$this->config['option_id'],			// settings section (same name as master option since one used for all fields)
