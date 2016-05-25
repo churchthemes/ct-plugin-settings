@@ -10,7 +10,7 @@
  * https://github.com/churchthemes/church-theme-content
  *
  * @package   CT_Plugin_Settings
- * @copyright Copyright (c) 2013 - 2014, churchthemes.com
+ * @copyright Copyright (c) 2013 - 2016, churchthemes.com
  * @link      https://github.com/churchthemes/ct-plugin-settings
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -211,11 +211,11 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 
 			// Add options page to menu
 			$this->page_hook_suffix = add_options_page(
-				$this->config['page_title'],		// text shown in window title
-				$this->config['menu_title'], 		// text shown in menu
-				'manage_options', 					// role/capability with access
-				$this->plugin_dir,					// unique menu/page slug
-				array( &$this, 'page_content' )		// callback providing output for page
+				$this->config['page_title'],				// text shown in window title
+				esc_html( $this->config['menu_title'] ), 	// text shown in menu
+				'manage_options', 							// role/capability with access
+				$this->plugin_dir,							// unique menu/page slug
+				array( &$this, 'page_content' )				// callback providing output for page
 			);
 
 			// Action after save
@@ -359,7 +359,23 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 				<?php if ( ! empty( $this->config['desc'] ) ) : ?>
 
 					<p>
-						<?php echo $this->config['desc']; ?>
+						<?php
+							echo wp_kses(
+								/* translators: %1$s is URL to Add-ons */
+								$this->config['desc'],
+								array(
+									'b' => array(),
+									'strong' => array(),
+									'i' => array(),
+									'em' => array(),
+									'br' => array(),
+									'a' => array(
+										'href' => array(),
+										'target' => array()
+									)
+								)
+							);
+						?>
 					</p>
 
 				<?php endif; ?>
@@ -406,7 +422,22 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 
 					// JavaScript will show the desription for the active tab
 					if ( ! empty( $section['desc'] ) ) {
-						echo '<p id="ctps-section-desc-' . esc_attr( $section_slug ) . '" class="ctps-section-desc">' . $section['desc'] . '</p>';
+						echo '<p id="ctps-section-desc-' . esc_attr( $section_slug ) . '" class="ctps-section-desc">';
+						echo wp_kses(
+							$section['desc'],
+							array(
+								'b' => array(),
+								'strong' => array(),
+								'i' => array(),
+								'em' => array(),
+								'br' => array(),
+								'a' => array(
+									'href' => array(),
+									'target' => array()
+								)
+							)
+						);
+						echo '</p>';
 					}
 
 				}
