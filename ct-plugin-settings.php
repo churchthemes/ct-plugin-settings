@@ -603,7 +603,20 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 
 			// Add description beneath
 			if ( ! empty( $data['field']['desc'] ) ) {
-				$html .= '<p class="description">' . $data['field']['desc'] . '</p>';
+				$html .= '<p class="description">';
+				$html .= wp_kses(
+							$data['field']['desc'],
+							array(
+								'b' => array(),
+								'strong' => array(),
+								'a' => array(
+									'href' => array(),
+									'target' => array(),
+								),
+								'br' => array(),
+							)
+						);
+				$html .= '</p>';
 			}
 
 			// Wrap field
