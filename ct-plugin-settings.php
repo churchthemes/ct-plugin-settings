@@ -10,9 +10,9 @@
  * https://github.com/churchthemes/church-theme-content
  *
  * @package   CT_Plugin_Settings
- * @copyright Copyright (c) 2013 - 2016, churchthemes.com
+ * @copyright Copyright (c) 2013 - 2017, churchthemes.com
  * @link      https://github.com/churchthemes/ct-plugin-settings
- * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @license   GPLv2 or later
  */
 
 // No direct access
