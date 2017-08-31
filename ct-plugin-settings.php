@@ -5,7 +5,7 @@
  * This class generates a tabbed settings page for WordPress plugins.
  * It also provides a method for retieving settings while considering defaults.
  *
- * See Church Theme Content plugin for example usage:
+ * See Church Content plugin for example usage:
  *
  * https://github.com/churchthemes/church-theme-content
  *
