@@ -283,9 +283,22 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 			// Add fields from config
 			foreach( $this->fields as $id => $field ) {
 
+				// Name.
+				$name = '';
+				if ( ! empty( $field['name'] ) ) {
+
+					$name = esc_html( $field['name'] );
+
+					if ( ! empty( $field['after_name'] ) ) {
+						$name .= ' <span class="ctps-after-name">' . esc_html( $field['after_name'] ) . '</span>';
+					}
+
+				}
+
+				// Add field.
 				add_settings_field(
 					$id,
-					! empty( $field['name'] ) ? esc_html( $field['name'] ) : '',
+					$name,
 					array( &$this, 'field_content' ),	// callback for rendering the field
 					$this->plugin_dir,					// menu page
 					$this->config['option_id'],			// settings section (same name as master option since one used for all fields)

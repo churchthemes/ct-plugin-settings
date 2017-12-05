@@ -11,9 +11,17 @@
 	display: none;
 }
 
+/* Name */
+
+.ctps-after-name { /* (Optional) or (Required) */
+	color: #595959;
+	font-weight: normal;
+}
+
 /* Input */
 
 .ctps-textarea {
 	width: 400px;
 	height: 100px;
 }
+
