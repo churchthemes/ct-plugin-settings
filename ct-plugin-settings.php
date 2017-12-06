@@ -489,7 +489,8 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 				'checkbox'	=> '',
 				'radio'		=> '',
 				'select'	=> '',
-				'number'	=> 'small-text'
+				'number'	=> 'small-text',
+				'content'	=> '',
 			);
 
 			// Build classes array
@@ -532,14 +533,14 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 				// Switch thru types to render differently
 				switch ( $data['field']['type'] ) {
 
-					// Text
+					// Text.
 					case 'text':
 
 						$html = '<input type="text" ' . $data['common_atts'] . ' id="' . $data['esc_element_id'] . '" value="' . $data['esc_value'] . '" />';
 
 						break;
 
-					// Textarea
+					// Textarea.
 					case 'textarea':
 
 						$html = '<textarea ' . $data['common_atts'] . ' id="' . $data['esc_element_id'] . '">' . esc_textarea( $data['value'] ) . '</textarea>';
@@ -548,7 +549,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 
 						break;
 
-					// Checkbox
+					// Checkbox.
 					case 'checkbox':
 
 						$html  = '<input type="hidden" ' . $data['common_atts'] . ' value="" />'; // causes unchecked box to post empty value (helps with default handling)
@@ -565,7 +566,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 
 						break;
 
-					// Radio
+					// Radio.
 					case 'radio':
 
 						if ( ! empty( $data['field']['options'] ) ) {
@@ -586,7 +587,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 
 						break;
 
-					// Select
+					// Select.
 					case 'select':
 
 						if ( ! empty( $data['field']['options'] ) ) {
@@ -603,10 +604,24 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 
 						break;
 
-					// Number
+					// Number.
 					case 'number':
 
 						$html = '<input type="number" ' . $data['common_atts'] . ' id="' . $data['esc_element_id'] . '" value="' . $data['esc_value'] . '" />';
+
+						break;
+
+					// Content.
+					// Just content from 'content' argument. Nothing to save.
+					case 'content':
+
+						$html = '';
+
+						if ( ! empty( $data['field']['content'] ) ) {
+							$html .= '<div id="' . esc_attr( 'ctps-content-' . esc_attr( $data['id'] ) ) . '">';
+							$html .= wp_kses_post( $data['field']['content'] );
+							$html .= '</div>';
+						}
 
 						break;
 
@@ -717,6 +732,14 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 						case 'number':
 
 							$value = (int) $value; // force number
+
+							break;
+
+						// Content.
+						case 'content':
+
+							// No value to save.
+							$value = '';
 
 							break;
 
