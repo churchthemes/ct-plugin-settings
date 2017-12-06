@@ -307,6 +307,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 					array(                            // arguments to pass to field_content callback.
 						$id,
 						$field,
+						'class' => 'ctps-field-' . $id,
 					)
 				);
 
@@ -621,9 +622,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 						$html = '';
 
 						if ( ! empty( $data['field']['content'] ) ) {
-							$html .= '<div id="' . esc_attr( 'ctps-content-' . esc_attr( $data['id'] ) ) . '">';
 							$html .= wp_kses_post( $data['field']['content'] );
-							$html .= '</div>';
 						}
 
 						break;
