@@ -15,8 +15,10 @@
  * @license   GPLv2 or later
  */
 
-// No direct access
-if ( ! defined( 'ABSPATH' ) ) exit;
+// No direct access.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 // Class may be used in multiple plugins
 if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both theme and plugin
@@ -96,7 +98,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 		public function __construct( $config ) {
 
 			// Version
-			$this->version = '1.0.3';
+			$this->version = '1.1';
 
 			// Prepare data
 			$this->prepare_data( $config );
@@ -629,21 +631,21 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 
 			}
 
-			// Add description beneath
+			// Add description beneath.
 			if ( ! empty( $data['field']['desc'] ) ) {
 				$html .= '<p class="description">';
 				$html .= wp_kses(
-							$data['field']['desc'],
-							array(
-								'b' => array(),
-								'strong' => array(),
-								'a' => array(
-									'href' => array(),
-									'target' => array(),
-								),
-								'br' => array(),
-							)
-						);
+					$data['field']['desc'],
+					array(
+						'b' => array(),
+						'strong' => array(),
+						'a' => array(
+							'href' => array(),
+							'target' => array(),
+						),
+						'br' => array(),
+					)
+				);
 				$html .= '</p>';
 			}
 
