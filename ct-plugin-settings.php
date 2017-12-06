@@ -734,7 +734,10 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 						// Number.
 						case 'number':
 
-							$value = (int) $value; // force number.
+							// If not a number, use default.
+							if ( ! is_numeric( $value ) ) {
+								$value = $this->fields[ $key ]['default'];
+							}
 
 							break;
 
