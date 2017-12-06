@@ -2,6 +2,12 @@
  * CT Plugin Settings Styles
  */
 
+/* More space for field labels */
+
+#ctps-form .form-table th {
+	width: 220px; /* standard is 200px */
+}
+
 /* Hide tabs and form before load */
 
 #ctps-tabs,
