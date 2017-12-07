@@ -17,12 +17,21 @@
 	display: none;
 }
 
+/* Text */
+
+.ctps-light {
+	color: #595959 !important;
+}
+
+.ctps-italic {
+	font-style: italic;
+}
+
 /* Name */
 
-.ctps-after-name { /* (Optional) or (Required) */
+.ctps-after-name { /* e.g. (Optional) or (Pro) */
 	color: #595959;
 	font-weight: normal;
-	color: rgba(102, 102, 102, 1);
 }
 
 /* Input */
