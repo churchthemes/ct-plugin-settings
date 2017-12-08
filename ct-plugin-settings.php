@@ -289,11 +289,31 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 				$name = '';
 				if ( ! empty( $field['name'] ) ) {
 
-					$name = esc_html( $field['name'] );
+					// Get name.
+					$name = $field['name'];
 
+					// Append text after name.
 					if ( ! empty( $field['after_name'] ) ) {
 						$name .= ' <span class="ctps-after-name">' . esc_html( $field['after_name'] ) . '</span>';
 					}
+
+					// Allow only basic HTML.
+					$name = wp_kses(
+						$name,
+						array(
+							'i' => array(),
+							'em' => array(),
+							'br' => array(),
+							'span' => array(
+								'class' => array(),
+								'id' => array()
+							),
+							'a' => array(
+								'href' => array(),
+								'target' => array(),
+							),
+						)
+					);
 
 				}
 
