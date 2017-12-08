@@ -294,7 +294,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 
 					// Append text after name.
 					if ( ! empty( $field['after_name'] ) ) {
-						$name .= ' <span class="ctps-after-name">' . esc_html( $field['after_name'] ) . '</span>';
+						$name .= ' <span class="ctps-after-name">' . $field['after_name'] . '</span>';
 					}
 
 					// Allow only basic HTML.
@@ -306,7 +306,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 							'br' => array(),
 							'span' => array(
 								'class' => array(),
-								'id' => array()
+								'id' => array(),
 							),
 							'a' => array(
 								'href' => array(),
