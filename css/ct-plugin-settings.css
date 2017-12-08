@@ -29,9 +29,11 @@
 
 /* Name */
 
-.ctps-after-name { /* e.g. (Optional) or (Pro) */
+.ctps-after-name,
+.ctps-after-name a { /* e.g. (Optional) or (Pro) */
 	color: #595959;
 	font-weight: normal;
+	text-decoration: none;
 }
 
 /* Input */
