@@ -530,7 +530,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 
 			// Custom class.
 			if ( ! empty( $data['field']['class'] ) ) {
-				$classes[] = $data['field']['class'];
+				$classes[] = trim( $data['field']['class'] );
 			}
 
 			// Build classes string.
