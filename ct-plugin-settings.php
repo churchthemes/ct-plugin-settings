@@ -409,6 +409,10 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 										'href' => array(),
 										'target' => array(),
 									),
+									'span' => array(
+										'class' => array(),
+										'id' => array(),
+									),
 								)
 							);
 						?>
@@ -470,6 +474,10 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 								'a' => array(
 									'href' => array(),
 									'target' => array(),
+								),
+								'span' => array(
+									'class' => array(),
+									'id' => array(),
 								),
 							)
 						);
@@ -664,6 +672,10 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 							'target' => array(),
 						),
 						'br' => array(),
+						'span' => array(
+							'class' => array(),
+							'id' => array(),
+						),
 					)
 				);
 				$html .= '</p>';
