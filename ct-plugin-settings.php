@@ -867,7 +867,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 			}
 
 			// Return filterable.
-			return apply_filters( 'ctps_get', $value, $setting );
+			return apply_filters( 'ctps_get', $value, $setting, $this );
 
 		}
 
