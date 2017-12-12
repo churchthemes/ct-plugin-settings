@@ -871,6 +871,29 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 
 		}
 
+		/**
+		 * Update Setting
+		 *
+		 * Update a single setting's value in the option array.
+		 *
+		 * @since 1.1
+		 * @access public
+		 * @param string $setting Setting slug.
+		 * @param string $value Value to set.
+		 */
+		public function update( $setting, $value ) {
+
+			// Get option's array of settings.
+			$settings = get_option( $this->config['option_id'] );
+
+			// Update value in array.
+			$settings[ $setting ] = $value;
+
+			// Re-save option's array.
+			update_option( $this->config['option_id'], $settings );
+
+		}
+
 	}
 
 }
