@@ -312,6 +312,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 								'href' => array(),
 								'target' => array(),
 							),
+							'code' => array(),
 						)
 					);
 
@@ -413,6 +414,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 										'class' => array(),
 										'id' => array(),
 									),
+									'code' => array(),
 								)
 							);
 						?>
@@ -479,6 +481,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 									'class' => array(),
 									'id' => array(),
 								),
+								'code' => array(),
 							)
 						);
 						echo '</p>';
@@ -676,6 +679,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 							'class' => array(),
 							'id' => array(),
 						),
+						'code' => array(),
 					)
 				);
 				$html .= '</p>';
