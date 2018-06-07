@@ -557,6 +557,12 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 
 			}
 
+			// Inline radio inputs?
+			$inline_class = '';
+			if ( $data['field']['inline'] ) {
+				$inline_class = ' ctps-inline';
+			}
+
 			// Use custom function to output field.
 			if ( ! empty( $data['field']['custom_content'] ) ) {
 				$html = call_user_func( $data['field']['custom_content'], $args, $data );
@@ -594,7 +600,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 						$html .= '	<input type="checkbox" ' . $data['common_atts'] . ' id="' . $data['esc_element_id'] . '" value="1"' . checked( '1', $data['value'], false ) . '/>';
 
 						if ( ! empty( $data['field']['checkbox_label'] ) ) {
-							$html .= ' ' . $data['field']['checkbox_label'];
+							$html .= $data['field']['checkbox_label'];
 						}
 
 						$html .= '</label>';
@@ -610,9 +616,9 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 
 								$esc_radio_id = $data['esc_element_id'] . '-' . $option_value;
 
-								$html .= '<div>';
+								$html .= '<div class="ctps-radio-container' . esc_attr( $inline_class ) . '">';
 								$html .= '	<label for="' . $esc_radio_id . '">';
-								$html .= '		<input type="radio" ' . $data['common_atts'] . ' id="' . $esc_radio_id . '" value="' . esc_attr( $option_value ) . '"' . checked( $option_value, $data['value'], false ) . '/> ' . esc_html( $option_text );
+								$html .= '		<input type="radio" ' . $data['common_atts'] . ' id="' . $esc_radio_id . '" value="' . esc_attr( $option_value ) . '"' . checked( $option_value, $data['value'], false ) . '/>' . esc_html( $option_text );
 								$html .= '	</label>';
 								$html .= '</div>';
 

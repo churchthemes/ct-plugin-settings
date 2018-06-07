@@ -36,7 +36,18 @@
 	text-decoration: none;
 }
 
-/* Input */
+/* Inline Radio */
+
+.ctps-radio-container.ctps-inline {
+	margin-bottom: 2px;
+	display: inline-block;
+}
+
+.ctps-radio-container.ctps-inline:not(:last-child) {
+	margin-right: 12px;
+}
+
+/* Sizing */
 
 .ctps-textarea {
 	width: 400px;
