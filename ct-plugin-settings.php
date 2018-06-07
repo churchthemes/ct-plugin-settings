@@ -10,7 +10,7 @@
  * https://github.com/churchthemes/church-theme-content
  *
  * @package   CT_Plugin_Settings
- * @copyright Copyright (c) 2013 - 2017, churchthemes.com
+ * @copyright Copyright (c) 2013 - 2018, churchthemes.com
  * @link      https://github.com/churchthemes/ct-plugin-settings
  * @license   GPLv2 or later
  */
