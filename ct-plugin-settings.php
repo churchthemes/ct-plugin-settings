@@ -519,7 +519,9 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 			// Prepare styles for elements (core WP styling).
 			$default_classes = array(
 				'text'     => 'regular-text',
+				'url'      => 'regular-text',
 				'textarea' => '',
+				'upload'   => 'regular-text',
 				'checkbox' => '',
 				'radio'    => '',
 				'select'   => '',
@@ -578,6 +580,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 
 					// Text.
 					case 'text':
+					case 'url': // same as text.
 
 						$html = '<input type="text" ' . $data['common_atts'] . ' id="' . $data['esc_element_id'] . '" value="' . $data['esc_value'] . '" />';
 
@@ -587,6 +590,18 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 					case 'textarea':
 
 						$html = '<textarea ' . $data['common_atts'] . ' id="' . $data['esc_element_id'] . '">' . esc_textarea( $data['value'] ) . '</textarea>';
+
+						break;
+
+					// Upload (URL).
+					case 'upload':
+
+						$upload_button = isset( $data['field']['upload_button'] ) ? $data['field']['upload_button'] : '';
+						$upload_title = isset( $data['field']['upload_title'] ) ? $data['field']['upload_title'] : '';
+						$upload_type = isset( $data['field']['upload_type'] ) ? $data['field']['upload_type'] : '';
+
+						$html  = '<input type="text" ' . $data['common_atts'] . ' id="' . $data['esc_element_id'] . '" value="' . $data['esc_value'] . '" />';
+						$html .= ' <input type="button" value="' . esc_attr( $upload_button ) . '" class="upload_button button ctps-upload-file" data-ctps-upload-type="' . esc_attr( $upload_type ) . '" data-ctps-upload-title="' . esc_attr( $upload_title ) . '" /> ';
 
 						break;
 
@@ -752,6 +767,15 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 							}
 
 							break;
+
+							// URL.
+							// Upload (value is URL).
+							case 'url':
+							case 'upload': // Regular (URL).
+
+								$value = esc_url_raw( $value ); // force valid URL or use nothing.
+
+								break;
 
 						// Checkbox.
 						case 'checkbox':
