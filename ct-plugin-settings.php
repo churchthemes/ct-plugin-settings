@@ -372,7 +372,13 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 
 			// Don't load where not needed.
 			if ( $this->is_settings_page() ) {
+
+				// Enable media-upload and thickbox for upload fields.
+				wp_enqueue_media();
+
+				// Settings JS.
 				wp_enqueue_script( 'ct-plugin-settings', trailingslashit( $this->config['url'] ) . 'js/ct-plugin-settings.js', false, $this->version ); // bust cache on update.
+
 			}
 
 		}
@@ -601,7 +607,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 						$upload_type = isset( $data['field']['upload_type'] ) ? $data['field']['upload_type'] : '';
 
 						$html  = '<input type="text" ' . $data['common_atts'] . ' id="' . $data['esc_element_id'] . '" value="' . $data['esc_value'] . '" />';
-						$html .= ' <input type="button" value="' . esc_attr( $upload_button ) . '" class="upload_button button ctps-upload-file" data-ctps-upload-type="' . esc_attr( $upload_type ) . '" data-ctps-upload-title="' . esc_attr( $upload_title ) . '" /> ';
+						$html .= '<input type="button" value="' . esc_attr( $upload_button ) . '" class="upload_button button ctps-upload-file" data-ctps-upload-type="' . esc_attr( $upload_type ) . '" data-ctps-upload-title="' . esc_attr( $upload_title ) . '" /> ';
 
 						break;
 

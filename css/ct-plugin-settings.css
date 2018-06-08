@@ -47,6 +47,14 @@
 	margin-right: 12px;
 }
 
+/* Upload */
+
+.ctps-upload,
+.ctps-upload_textarea,
+.ctps-upload-file {
+	vertical-align: middle;
+}
+
 /* Sizing */
 
 .ctps-textarea {
