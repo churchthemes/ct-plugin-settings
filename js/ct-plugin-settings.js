@@ -99,7 +99,12 @@ jQuery( document ).ready( function( $ ) {
 
 				// Set attachment URL on input
 				if ( attachment.url ) {
+
 					$input_element.val( attachment.url ); // input is directly before button
+
+					// Trigger change in case field is set to show an image preview.
+					$input_element.trigger( 'keyup' );
+
 				}
 
 			}
@@ -107,6 +112,39 @@ jQuery( document ).ready( function( $ ) {
 		} );
 
 	} );
+
+	// Show image when upload field changed.
+	var $image_upload_elements = $( 'input[data-ctps-upload-show-image].ctps-upload' );
+	$image_upload_elements.each( function() {
+
+		// Detect URL change.
+		$( this ).on( 'change, keyup', function() {
+
+			var $input = $( this );
+
+			// Get image width.
+			var image_width = $input.data( 'ctps-upload-show-image' );
+
+			// Have width.
+			if ( image_width ) {
+
+				// Get image URL.
+				var image_url = $input.val();
+
+				// Get container to add image to end of.
+				var $container = $( $input ).parent( '.ctps-section' );
+
+				// Add image element.
+				$( '.ctps-upload-image', $container ).remove(); // remove existing element.
+				$container.append( '<img src="' + image_url + '" class="ctps-upload-image" style="width: ' + image_width + 'px">' );
+				$( '.ctps-upload-image', $container ).fadeIn( 'fast' );
+
+			}
+
+		} );
+
+
+	} ).trigger( 'keyup' ); // trigger on first load.
 
 } );
 

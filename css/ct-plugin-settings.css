@@ -55,6 +55,17 @@
 	vertical-align: middle;
 }
 
+.ctps-upload {
+	margin-right: 5px;
+}
+
+.ctps-upload-image {
+	display: none;
+	max-width: 100%;
+	margin-top: 18px;
+	margin-left: 1px;
+}
+
 /* Sizing */
 
 .ctps-textarea {

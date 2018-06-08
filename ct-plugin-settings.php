@@ -605,8 +605,9 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 						$upload_button = isset( $data['field']['upload_button'] ) ? $data['field']['upload_button'] : '';
 						$upload_title = isset( $data['field']['upload_title'] ) ? $data['field']['upload_title'] : '';
 						$upload_type = isset( $data['field']['upload_type'] ) ? $data['field']['upload_type'] : '';
+						$upload_show_image = isset( $data['field']['upload_show_image'] ) ? $data['field']['upload_show_image'] : '';
 
-						$html  = '<input type="text" ' . $data['common_atts'] . ' id="' . $data['esc_element_id'] . '" value="' . $data['esc_value'] . '" />';
+						$html  = '<input type="text" ' . $data['common_atts'] . ' id="' . $data['esc_element_id'] . '" value="' . $data['esc_value'] . '" data-ctps-upload-show-image="' . esc_attr( $upload_show_image ) . '" />';
 						$html .= '<input type="button" value="' . esc_attr( $upload_button ) . '" class="upload_button button ctps-upload-file" data-ctps-upload-type="' . esc_attr( $upload_type ) . '" data-ctps-upload-title="' . esc_attr( $upload_title ) . '" /> ';
 
 						break;
