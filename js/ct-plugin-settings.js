@@ -63,7 +63,7 @@ jQuery( document ).ready( function( $ ) {
 
 	} );
 
-	// Open media uploader on button click
+	// Open media uploader on button click.
 	$( 'body' ).on( 'click', '.ctps-upload-file', function( event ) {
 
 		var frame;
@@ -74,42 +74,47 @@ jQuery( document ).ready( function( $ ) {
 		// Input element
 		$input_element = $( this ).prev( 'input' );
 
-		// Media frame
-		frame = wp.media( {
-			title : $( this ).attr( 'data-ctps-upload-title' ),
-			library : { type : $( this ).attr( 'data-ctps-upload-type' ) },
-			multiple : false
-		} );
+		// Only if button not disabled.
+		if ( ! $( this ).hasClass( 'button-disabled' ) ) {
 
-		// Open media frame
-		frame.open();
+			// Media frame
+			frame = wp.media( {
+				title : $( this ).attr( 'data-ctps-upload-title' ),
+				library : { type : $( this ).attr( 'data-ctps-upload-type' ) },
+				multiple : false
+			} );
 
-		// Set attachment URL on click of button
-		// (don't do on 'close' so user can cancel)
-		frame.on( 'select', function() {
+			// Open media frame
+			frame.open();
 
-			var attachments, attachment;
+			// Set attachment URL on click of button
+			// (don't do on 'close' so user can cancel)
+			frame.on( 'select', function() {
 
-			// Get attachment data
-			attachments = frame.state().get( 'selection' ).toJSON();
-			attachment = attachments[0];
+				var attachments, attachment;
 
-			// An attachment is selected
-			if ( typeof attachment != 'undefined' ) {
+				// Get attachment data
+				attachments = frame.state().get( 'selection' ).toJSON();
+				attachment = attachments[0];
 
-				// Set attachment URL on input
-				if ( attachment.url ) {
+				// An attachment is selected
+				if ( typeof attachment != 'undefined' ) {
 
-					$input_element.val( attachment.url ); // input is directly before button
+					// Set attachment URL on input
+					if ( attachment.url ) {
 
-					// Trigger change in case field is set to show an image preview.
-					$input_element.trigger( 'keyup' );
+						$input_element.val( attachment.url ); // input is directly before button
+
+						// Trigger change in case field is set to show an image preview.
+						$input_element.trigger( 'keyup' );
+
+					}
 
 				}
 
-			}
+			} );
 
-		} );
+		}
 
 	} );
 
