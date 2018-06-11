@@ -141,7 +141,6 @@ jQuery( document ).ready( function( $ ) {
 					var image_preview_url = $( '.ctps-upload-image', $container ).attr( 'src' );
 
 					// Same image not already present.
-console.log( image_url + ' !== ' + image_preview_url );
 					if ( image_url !== image_preview_url ) {
 
 						// Remove any existing preview image.
