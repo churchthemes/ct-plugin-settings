@@ -19,6 +19,10 @@
 
 /* Text */
 
+.ctps-section-desc {
+	font-size: 1.05em;
+}
+
 .ctps-light {
 	color: #595959;
 }
