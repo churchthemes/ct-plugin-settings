@@ -19,8 +19,9 @@
 
 /* Text */
 
+#ctps-content > p,
 .ctps-section-desc {
-	font-size: 1.05em;
+	font-size: 14px;
 }
 
 .ctps-light {
