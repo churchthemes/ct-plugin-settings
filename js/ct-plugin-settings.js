@@ -129,16 +129,41 @@ jQuery( document ).ready( function( $ ) {
 			if ( image_width ) {
 
 				// Get image URL.
-				var image_url = $input.val();
+				var image_url = $input.val().trim();
 
-				// Get container to add image to end of.
-				var $container = $( $input ).parent( '.ctps-section' );
+				// Have image URL.
+				if ( image_url ) {
 
-				// Add image element.
-				$( '.ctps-upload-image', $container ).remove(); // remove existing element.
-				$container.append( '<img src="' + image_url + '" class="ctps-upload-image" style="width: ' + image_width + 'px">' );
-				$( '.ctps-upload-image', $container ).fadeIn( 'fast' );
+					// Get container to add image to end of.
+					var $container = $( $input ).parent( '.ctps-section' );
 
+					// Get existing image, if any.
+					var image_preview_url = $( '.ctps-upload-image', $container ).attr( 'src' );
+
+					// Same image not already present.
+console.log( image_url + ' !== ' + image_preview_url );
+					if ( image_url !== image_preview_url ) {
+
+						// Remove any existing preview image.
+						$( '.ctps-upload-image', $container ).remove();
+
+						// Add image element.
+						$container.append( '<img class="ctps-upload-image" style="width: ' + image_width + 'px; display: none;">' );
+
+						// Add src to image and fade in.
+						$( '.ctps-upload-image', $container )
+							.attr( 'src', image_url )
+							.fadeIn( 'fast' );
+
+					}
+
+				}
+
+				// No image URL.
+				else {
+					// Remove any existing preview image.
+					$( '.ctps-upload-image', $container ).remove();
+				}
 			}
 
 		} );
