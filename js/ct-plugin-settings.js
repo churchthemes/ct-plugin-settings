@@ -175,6 +175,12 @@ jQuery( document ).ready( function( $ ) {
 
 	} ).trigger( 'keyup' ); // trigger on first load.
 
+	// Prevent clicks on disabled buttons.
+	$( '#ctps-form a.button-disabled' ).on( 'click', function( e ) {
+		e.preventDefault();
+	} );
+
+
 } );
 
 /**
