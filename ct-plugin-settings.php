@@ -10,7 +10,7 @@
  * https://github.com/churchthemes/church-theme-content
  *
  * @package   CT_Plugin_Settings
- * @copyright Copyright (c) 2013 - 2018, churchthemes.com
+ * @copyright Copyright (c) 2013 - 2018, ChurchThemes.com
  * @link      https://github.com/churchthemes/ct-plugin-settings
  * @license   GPLv2 or later
  */
@@ -567,7 +567,7 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 
 			// Inline radio inputs?
 			$inline_class = '';
-			if ( $data['field']['inline'] ) {
+			if ( ! empty( $data['field']['inline'] ) ) {
 				$inline_class = ' ctps-inline';
 			}
 
