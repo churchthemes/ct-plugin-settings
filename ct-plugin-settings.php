@@ -690,6 +690,9 @@ if ( ! class_exists( 'CT_Plugin_Settings' ) ) { // in case class used in both th
 
 			}
 
+			// Filter field after content (before description).
+			$html = apply_filters( 'ctps_field_content_after', $html, $args );
+
 			// Add description beneath.
 			if ( ! empty( $data['field']['desc'] ) ) {
 				$html .= '<p class="description">';
